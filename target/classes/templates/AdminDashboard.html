@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - BloodLife</title>
+
+<!-- Bootstrap CSS & Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f9f5f5;
+    margin: 0;
+    padding-bottom: 100px;
+    overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #b71c1c !important;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+}
+.navbar-brand { color: white !important; font-weight: 700; font-size: 1.8rem; letter-spacing: 1px; }
+.navbar-nav .nav-link { color: white !important; font-weight: 500; transition: all 0.3s; }
+.navbar-nav .nav-link:hover { color: #ffe6e6 !important; transform: scale(1.05); }
+
+/* Section Titles */
+.section-title {
+    font-weight: 600;
+    font-size: 1.6rem;
+    color: #b71c1c;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+}
+.section-title::after {
+    content: "";
+    width: 80px;
+    height: 3px;
+    background-color: #b71c1c;
+    display: block;
+    margin: 8px auto 0;
+    border-radius: 2px;
+}
+
+/* Cards */
+.card {
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    padding: 25px 20px;
+    text-align: center;
+    background-color: #fff;
+    opacity: 0;
+    transform: translateY(30px);
+}
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+.card h5 { font-weight: 700; color: #b71c1c; margin-bottom: 15px; }
+.card p { font-weight: 500; color: #444; font-size: 1.1rem; transition: color 0.3s; }
+.card p:hover { color: #b71c1c; }
+
+/* Buttons */
+.btn-sm { font-size: 0.85rem; padding: 7px 14px; }
+
+/* Footer */
+.footer {
+    background-color: #b71c1c;
+    color: white;
+    text-align: center;
+    padding: 1.2rem 0;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+.footer .social-icons i { margin: 0 10px; font-size: 1.5rem; cursor: pointer; transition: 0.4s; }
+.footer .social-icons i:hover { color: #ffe6e6; transform: scale(1.3); }
+
+/* Responsive */
+@media (max-width: 768px) { .card { margin-bottom: 20px; } }
+
+/* Animations */
+.fade-in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+    transition: all 0.8s ease-out;
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container">
+    <a class="navbar-brand" href="#">BloodLife Admin</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="/adminDashboard">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="/alluserDetails">Users</a></li>
+        <li class="nav-item"><a class="nav-link" href="/admindonordetailss">Donors</a></li>
+        <li class="nav-item"><a class="nav-link" href="/viewRequests">Requests</a></li>
+        <li class="nav-item"><a class="nav-link" href="/">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ================= Key Statistics ================= -->
+<section class="container mt-5">
+  <h3 class="section-title">Key Statistics</h3>
+  <div class="row g-4 text-center">
+    <div class="col-md-3 col-sm-6">
+      <div class="card" style="background-color:#fff0f0;">
+        <h5>Total Users</h5>
+        <p th:text="${totalUsers}">0</p>
+        <a href="/alluserDetails" class="btn btn-sm btn-danger">View Users</a>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="card" style="background-color:#ffe6e6;">
+        <h5>Total Donors</h5>
+        <p th:text="${totalDonors}">0</p>
+        <a href="/admindonordetailss" class="btn btn-sm btn-danger">View Donors</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- ================= Blood Stock Chart ================= -->
+<section class="container mt-5 mb-5">
+  <h3 class="section-title">Blood Stock Chart</h3>
+  <div class="card p-4">
+    <canvas id="bloodChart" height="120"></canvas>
+  </div>
+</section>
+
+<!-- ================= About Blood ================= -->
+<section class="container mt-5 mb-5">
+  <h3 class="section-title">About Blood</h3>
+  <div class="card p-4" style="background-color:#fff5f5;">
+    <p>
+      Blood is vital for life. It carries oxygen and nutrients to all parts of the body and removes waste. 
+      Donating blood saves lives, helps patients during surgeries, accidents, or medical conditions like anemia. 
+      Every donation can help multiple people and strengthens community health. Your contribution matters!
+    </p>
+  </div>
+</section>
+
+<!-- ================= Footer ================= -->
+<footer class="footer">
+  <p>© 2025 BloodLife | All Rights Reserved</p>
+  <div class="social-icons mt-2">
+    <i class="bi bi-whatsapp"></i>
+    <i class="bi bi-instagram"></i>
+    <i class="bi bi-telephone-fill"></i>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Blood Chart
+const ctx = document.getElementById('bloodChart').getContext('2d');
+const bloodChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'],
+        datasets: [{
+            label: 'Units Available',
+            data: [12, 5, 8, 4, 10, 6, 3, 2], // Replace dynamically
+            backgroundColor: '#b71c1c'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Blood Units by Group', color:'#b71c1c', font:{size:18} }
+        },
+        scales: { y: { beginAtZero: true, ticks: { stepSize: 2 } } }
+    }
+});
+
+// Scroll Animation for Cards
+const cards = document.querySelectorAll('.card');
+window.addEventListener('scroll', () => {
+  const triggerBottom = window.innerHeight / 5 * 4;
+  cards.forEach(card => {
+    const cardTop = card.getBoundingClientRect().top;
+    if(cardTop < triggerBottom){
+      card.classList.add('fade-in');
+    }
+  });
+});
+</script>
+</body>
+</html>

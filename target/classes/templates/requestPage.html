@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Sent - BloodLife</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #fff5f5;
+    color: #b71c1c;
+    overflow-x: hidden;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #d32f2f !important;
+}
+.navbar-brand, .navbar-nav .nav-link {
+    color: white !important;
+    font-weight: 600;
+}
+.navbar-nav .nav-link:hover {
+    text-decoration: underline;
+}
+
+/* Full Heart Background */
+.heart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    position: relative;
+}
+
+.heart {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    background-color: #d32f2f;
+    transform: rotate(-45deg);
+    animation: heartbeat 1.5s infinite;
+}
+.heart::before,
+.heart::after {
+    content: '';
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background-color: #d32f2f;
+    border-radius: 50%;
+}
+.heart::before {
+    top: -125px;
+    left: 0;
+}
+.heart::after {
+    left: 125px;
+    top: 0;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: rotate(-45deg) scale(1); }
+    25% { transform: rotate(-45deg) scale(1.1); }
+    50% { transform: rotate(-45deg) scale(1.2); }
+    75% { transform: rotate(-45deg) scale(1.1); }
+}
+
+/* Center Card inside Heart */
+.container-card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    border: 3px solid #d32f2f;
+    border-radius: 25px;
+    padding: 40px 30px;
+    text-align: center;
+    color: #b71c1c;
+    box-shadow: 0 10px 30px rgba(211, 47, 47, 0.3);
+}
+
+.container-card h1 {
+    color: #d32f2f;
+    font-size: 32px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    animation: blink 1.2s infinite;
+}
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.6; }
+}
+
+.message { font-size: 16px; margin-bottom: 10px; }
+.email { font-weight: bold; color: #d32f2f; font-size: 14px; }
+.subtext { color: #b71c1c; font-size: 13px; }
+
+/* Footer with social icons */
+footer {
+    background-color: #d32f2f;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+footer .social-icons i {
+    font-size: 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+footer .social-icons i:hover {
+    transform: scale(1.2);
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .heart { width: 180px; height: 180px; }
+    .heart::before, .heart::after { width: 180px; height: 180px; }
+    .container-card { padding: 30px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#">BloodLife</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="dashboard">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+            <li class="nav-item"><a class="nav-link" href="userlogout">Logout</a></li>
+        </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Heart Section -->
+<div class="heart-wrapper">
+    <div class="heart"></div>
+    <div class="container-card">
+        <h1>Request Sent</h1>
+        <div class="message">
+            Your request has been successfully sent to <br>
+            <span class="email" th:text="${emailid}">user@example.com</span>
+        </div>
+        <div class="subtext">Thank you for contributing. We will update you soon.</div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>© 2025 BloodLife | All Rights Reserved</p>
+  <div class="social-icons mt-2">
+    <i class="bi bi-whatsapp"></i>
+    <i class="bi bi-instagram"></i>
+    <i class="bi bi-telephone-fill"></i>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

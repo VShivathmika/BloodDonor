@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BloodLife - Donor Login</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #c62828; /* Full red background */
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-card {
+    background-color: #ffffff; /* White card */
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .login-card .logo img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+  }
+
+  .login-card h1 {
+    color: #c62828;
+    font-weight: 600;
+    margin-bottom: 25px;
+  }
+
+  .form-control {
+    border: 1.5px solid #c62828;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+  }
+
+  .form-control:focus {
+    border-color: #e53935;
+    box-shadow: 0 0 8px rgba(229, 57, 53, 0.3);
+  }
+
+  .btn-login {
+    background-color: #c62828;
+    color: #fff;
+    font-weight: 600;
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    transition: 0.3s;
+  }
+
+  .btn-login:hover {
+    background-color: #e53935;
+    box-shadow: 0 6px 15px rgba(229, 57, 53, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .footer-text {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: #c62828;
+  }
+
+  .footer-text a {
+    color: #c62828;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .footer-text a:hover {
+    text-decoration: underline;
+  }
+
+  /* Error message styling */
+  .alert-error {
+    margin-bottom: 15px;
+    padding: 10px 15px;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    text-align: left;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="login-card">
+  <!-- Blood Drop Logo -->
+  <div class="logo">
+    <img src="https://cdn-icons-png.flaticon.com/512/1496/1496416.png" alt="Blood Drop Logo">
+  </div>
+
+  <h1>Donor Login</h1>
+
+  <!-- Error message (show dynamically if login fails) -->
+  <!-- Example: use server-side template engine like Thymeleaf or PHP -->
+  <div class="alert-error" style="display: none;" id="loginError">
+    Invalid credentials. Please try again.
+  </div>
+
+  <!-- Login Form -->
+  <form id="loginForm" action="userLoginValidation" method="post">
+    <input type="text" class="form-control" name="emailid" placeholder="Email ID" required>
+    <input type="password" class="form-control" name="password" placeholder="Password" required>
+    <button type="submit" class="btn btn-login">Login</button>
+  </form>
+
+  <!-- Registration Link -->
+  <div class="footer-text">
+    Not registered yet? <a href="registrationPage">Create an account</a>
+  </div>
+</div>
+
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Optional: Example JavaScript to show error dynamically -->
+<script>
+  // Example: If you pass a query param ?error=true, show error message
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('error') === 'true') {
+    document.getElementById('loginError').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donor Registration</title>
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome & Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #c62828;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ===== DYNAMIC BLOOD DROPS BACKGROUND ===== */
+.blood-background {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+.blood-drop {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  background: red;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: fall linear infinite;
+}
+@keyframes fall {
+  0% { transform: translateY(-50px) scale(1); opacity: 0.6; }
+  50% { transform: translateY(50vh) scale(1.2); opacity: 0.8; }
+  100% { transform: translateY(110vh) scale(1); opacity: 0; }
+}
+
+/* ===== NAVBAR ===== */
+nav {
+  background-color: #c62828;
+  z-index: 2;
+}
+.navbar-nav .nav-link {
+  color: white !important;
+  font-weight: 500;
+  transition: color 0.3s, transform 0.2s;
+}
+.navbar-nav .nav-link:hover {
+  color: #fff200 !important;
+  transform: scale(1.05);
+}
+
+/* ===== FORM CARD ===== */
+.form-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.card {
+  background-color: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  padding: 40px 30px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(-30px);
+  animation: fadeInUp 1s ease forwards;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+@keyframes fadeInUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+.card h1 {
+  color: #c62828;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 28px;
+  font-weight: 600;
+  animation: fadeInDown 1s ease forwards;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+input, select, button {
+  margin-bottom: 15px;
+}
+input, select {
+  padding: 12px 15px;
+  font-size: 16px;
+  border: 2px solid #c62828;
+  border-radius: 10px;
+  width: 100%;
+  transition: all 0.3s ease, box-shadow 0.3s ease;
+}
+input:focus, select:focus {
+  outline: none;
+  border-color: #b71c1c;
+  box-shadow: 0 0 15px rgba(183,28,28,0.3);
+}
+input[readonly] {
+  background-color: #fdecea;
+  cursor: not-allowed;
+}
+button[type="submit"] {
+  background-color: #c62828;
+  color: white;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 12px;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  width: 100%;
+}
+button[type="submit"]:hover {
+  background-color: #b71c1c;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 5px 15px rgba(183,28,28,0.4);
+}
+
+/* ===== FOOTER ===== */
+footer {
+  width: 100%;
+  text-align: center;
+  background-color: #c62828;
+  color: white;
+  padding: 20px 0;
+  font-size: 14px;
+  z-index: 2;
+}
+.footer-icons a {
+  color: white;
+  margin: 0 10px;
+  font-size: 22px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.footer-icons a:hover { 
+  transform: scale(1.3);
+  color: #fff200;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .card { padding: 35px 25px; }
+  .navbar-nav { text-align: center; }
+  .navbar-nav .nav-item { margin: 5px 0; }
+}
+@media (max-width: 480px) {
+  .card { padding: 30px 20px; }
+  .card h1 { font-size: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Dynamic Blood Drop Background -->
+<div class="blood-background" id="bloodBackground"></div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#"><i class="fas fa-tint me-2"></i>BloodLife</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Donate Blood</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Find Donor</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Form Container -->
+<div class="form-container">
+  <div class="card shadow-lg">
+    <h1>Donor Registration</h1>
+    <form action="insertDonorDetails">
+      <input type="text" class="form-control" th:value="${user.username}" name="name" placeholder="Full Name">
+      <input type="email" class="form-control" th:value="${user.emailid}" name="emailid" placeholder="Email Address">
+      <input type="tel" class="form-control" th:value="${user.mobilenumber}" name="mobilenumber" placeholder="Mobile Number">
+      <select class="form-select" name="gender" required>
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Male" th:selected="${user.gender=='Male'}">Male</option>
+        <option value="Female" th:selected="${user.gender=='Female'}">Female</option>
+        <option value="Other" th:selected="${user.gender=='Other'}">Other</option>
+      </select>
+      <input type="text" class="form-control" th:value="${user.address}" name="address" placeholder="Address">
+      <select class="form-select" name="bloodgroup" required>
+        <option value="" disabled selected>Select Blood Group</option>
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+      </select>
+      <input type="number" class="form-control" name="age" placeholder="Age" min="18" required>
+      <button type="submit"><i class="fas fa-hand-holding-droplet me-2"></i>Register</button>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer mt-auto">
+  <p>© 2025 BloodLife | All Rights Reserved</p>
+  <div class="footer-icons mt-2">
+    <a href="#"><i class="bi bi-whatsapp"></i></a>
+    <a href="#"><i class="bi bi-instagram"></i></a>
+    <a href="#"><i class="bi bi-telephone-fill"></i></a>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Dynamic Blood Drops JS -->
+<script>
+const background = document.getElementById('bloodBackground');
+const totalDrops = 50; // Number of drops
+
+for (let i = 0; i < totalDrops; i++) {
+  const drop = document.createElement('div');
+  drop.classList.add('blood-drop');
+  drop.style.left = Math.random() * 100 + 'vw';
+  drop.style.width = 5 + Math.random() * 15 + 'px';
+  drop.style.height = 10 + Math.random() * 25 + 'px';
+  drop.style.animationDuration = 4 + Math.random() * 6 + 's';
+  drop.style.animationDelay = Math.random() * 5 + 's';
+  background.appendChild(drop);
+}
+</script>
+</body>
+</html>

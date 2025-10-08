@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BloodLife Dashboard</title>
+
+<!-- Bootstrap & Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ====== BASE ====== */
+body { font-family: 'Poppins', sans-serif; background: #fff; margin: 0; overflow-x: hidden; transition: background 0.5s; }
+a { text-decoration: none; }
+
+/* ====== SIDEBAR ====== */
+#sidebar { position: fixed; top: 0; left: 0; width: 230px; height: 100%; background: linear-gradient(180deg, #d32f2f, #b71c1c); color: #fff; padding-top: 30px; box-shadow: 3px 0 15px rgba(0,0,0,0.1); z-index: 1050; transition: all 0.4s ease; }
+#sidebar h3 { font-weight: 700; text-align: center; letter-spacing: 1px; margin-bottom: 30px; }
+#sidebar ul { list-style: none; padding: 0; }
+#sidebar ul li a { display: block; color: #fff; padding: 14px 25px; margin: 6px 10px; border-radius: 10px; font-weight: 500; transition: all 0.3s; }
+#sidebar ul li a:hover, #sidebar ul li a.active { background: #fff; color: #d32f2f; transform: translateX(6px); }
+#sidebar.active { left: -250px; }
+
+/* ====== NAVBAR ====== */
+.navbar { position: fixed; top: 0; left: 230px; right: 0; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.08); padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; transition: all 0.4s; z-index: 1040; }
+.navbar .btn { background: #d32f2f; color: white; border: none; border-radius: 8px; }
+.navbar .btn:hover { background: #b71c1c; transform: scale(1.05); }
+.navbar-text i { color: #d32f2f; margin-right: 8px; }
+
+/* ====== CONTENT ====== */
+#content { margin-left: 230px; padding: 120px 40px 40px; transition: margin-left 0.4s; }
+#content.centered { margin-left: 0; }
+
+/* ====== HERO ====== */
+.hero { background: linear-gradient(135deg, #d32f2f, #b71c1c); color: #fff; text-align: center; border-radius: 20px; padding: 100px 40px 80px; position: relative; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.2); animation: fadeIn 1s ease forwards; }
+.hero h1 { font-size: 2.8rem; margin-bottom: 15px; animation: slideDown 1s ease; }
+.hero p { font-size: 1.2rem; opacity: 0.9; animation: fadeInUp 1s ease 0.4s forwards; }
+.blood-drop { position: absolute; width: 20px; height: 20px; background: #fff3f3; border-radius: 50%; opacity: 0.8; animation: drop 6s linear infinite; }
+@keyframes drop { 0% { transform: translateY(-100px) scale(0.5); opacity: 0.8; } 50% { opacity: 1; } 100% { transform: translateY(600px) scale(1.2); opacity: 0; } }
+
+/* ====== CARDS ====== */
+.cards { display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; margin-top: 40px; }
+.card { width: 300px; border: none; border-radius: 15px; box-shadow: 0 6px 18px rgba(0,0,0,0.1); text-align: center; padding: 30px 20px; background: #fff; transition: transform 0.4s, box-shadow 0.4s; animation: fadeInUp 1s ease; }
+.card:hover { transform: translateY(-10px) scale(1.03); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
+.card i { font-size: 40px; color: #d32f2f; margin-bottom: 15px; animation: pulse 2s infinite; }
+.card button { background: #d32f2f; color: white; border-radius: 25px; padding: 8px 25px; transition: all 0.3s ease; }
+.card button:hover { background: #b71c1c; transform: scale(1.07); }
+
+/* ====== COMPATIBILITY CHART ====== */
+#compatibility { background: linear-gradient(135deg, #fff0f3 0%, #ffe6ea 100%); padding: 70px 20px; border-radius: 20px; margin-top: 50px; opacity: 0; transform: translateY(60px); transition: all 1s ease; }
+#compatibility.visible { opacity: 1; transform: translateY(0); }
+#compatibility h2 { color: #d32f2f; font-weight: 700; margin-bottom: 15px; }
+#compatibilityTable tr { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+#compatibilityTable tr:hover { transform: scale(1.02); background: #fff6f6; box-shadow: 0 4px 12px rgba(211,47,47,0.2); }
+
+/* ====== GUIDELINES ====== */
+.list-section { background: #fff; border-radius: 20px; padding: 30px; margin-top: 50px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); animation: fadeInUp 1s ease; }
+.list-section li { margin: 10px 0; font-size: 1rem; position: relative; }
+.list-section li::before { content: "💉"; margin-right: 10px; }
+
+/* ====== FOOTER ====== */
+footer { background: linear-gradient(90deg, #b71c1c, #d32f2f); color: white; text-align: center; padding: 20px; margin-top: 60px; border-radius: 12px 12px 0 0; }
+.social-icons i { font-size: 1.6rem; margin: 0 12px; transition: transform 0.3s, color 0.3s; }
+.social-icons i:hover { transform: scale(1.2); color: #fff200; }
+
+/* ====== ANIMATIONS ====== */
+@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+@keyframes fadeInUp { from {opacity: 0; transform: translateY(30px);} to {opacity: 1; transform: translateY(0);} }
+@keyframes slideDown { from {transform: translateY(-30px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+@keyframes pulse { 0%,100% { transform: scale(1);} 50% { transform: scale(1.15);} }
+
+/* ====== RESPONSIVE ====== */
+@media(max-width: 992px) { #sidebar { width: 200px; } #content { margin-left: 200px; padding: 100px 20px; } .navbar { left: 200px; padding: 10px 20px; } }
+@media(max-width: 768px) { #sidebar { left: -250px; } #content { margin-left: 0; } .navbar { left: 0; width: 100%; padding: 10px 20px; } }
+</style>
+</head>
+<body>
+
+<!-- ====== SIDEBAR ====== -->
+<nav id="sidebar">
+  <h3>🩸 BloodLife</h3>
+  <ul>
+    <li><a href="#dashboard" class="active">Dashboard</a></li>
+    <li><a href="#profile">Profile</a></li>
+    <li><a href="#donate">Donate Blood</a></li>
+    <li><a href="DonorDetails">Find Donor</a></li>
+    <li><a href="#requests">Requests</a></li>
+    <li><a href="userlogout">Logout</a></li>
+  </ul>
+</nav>
+
+<!-- ====== NAVBAR ====== -->
+<nav class="navbar">
+  <button class="btn" id="sidebarToggle"><i class="fas fa-bars"></i></button>
+  <span class="navbar-text">
+    <i class="fas fa-user-circle"></i> Welcome, <strong th:text="${username}">User</strong>
+  </span>
+</nav>
+
+<!-- ====== MAIN CONTENT ====== -->
+<div id="content">
+  <!-- HERO -->
+  <div class="hero" id="dashboard">
+    <h1>Welcome Back, <span th:text="${username}">User</span>!</h1>
+    <p>Your contribution saves lives. Be the reason for someone's heartbeat.</p>
+    <div class="blood-drop" style="left:15%; animation-delay:0s;"></div>
+    <div class="blood-drop" style="left:35%; animation-delay:1s;"></div>
+    <div class="blood-drop" style="left:55%; animation-delay:2s;"></div>
+    <div class="blood-drop" style="left:75%; animation-delay:1.5s;"></div>
+    <div class="blood-drop" style="left:90%; animation-delay:0.5s;"></div>
+  </div>
+
+  <!-- DASHBOARD CARDS -->
+  <div class="cards">
+    <form action="getDetails" method="get" class="card p-3" id="donate">
+      <input type="hidden" name="emailid" th:value="${email}">
+      <i class="fas fa-hand-holding-heart"></i>
+      <h5>Donate Blood</h5>
+      <p>Give the gift of life — find nearby donation camps.</p>
+      <button type="submit" class="btn">Donate Now</button>
+    </form>
+
+    <form action="DonorDetails" method="get" class="card p-3" id="find">
+      <i class="fas fa-search"></i>
+      <h5>Find a Donor</h5>
+      <p>Locate compatible donors quickly and efficiently.</p>
+      <button type="submit" class="btn">Find Donor</button>
+    </form>
+  </div>
+
+  <!-- COMPATIBILITY CHART -->
+  <section id="compatibility">
+    <div class="container text-center">
+      <h2>🩸 Blood Group Compatibility Chart</h2>
+      <p class="text-muted mb-5">Know who you can donate to and receive from.</p>
+      <div class="table-responsive">
+        <table class="table table-bordered align-middle shadow-sm" id="compatibilityTable">
+          <thead class="table-danger">
+            <tr>
+              <th>Blood Group</th>
+              <th>Can Donate Blood To</th>
+              <th>Can Receive Blood From</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>A+</b></td><td>A+, AB+</td><td>A+, A−, O+, O−</td></tr>
+            <tr><td><b>A−</b></td><td>A+, A−, AB+, AB−</td><td>A−, O−</td></tr>
+            <tr><td><b>B+</b></td><td>B+, AB+</td><td>B+, B−, O+, O−</td></tr>
+            <tr><td><b>B−</b></td><td>B+, B−, AB+, AB−</td><td>B−, O−</td></tr>
+            <tr><td><b>AB+</b></td><td>AB+ <small>(Universal Recipient)</small></td><td>All Blood Groups</td></tr>
+            <tr><td><b>AB−</b></td><td>AB+, AB−</td><td>A−, B−, AB−, O−</td></tr>
+            <tr><td><b>O+</b></td><td>O+, A+, B+, AB+</td><td>O+, O−</td></tr>
+            <tr><td><b>O−</b></td><td>All Blood Groups <small>(Universal Donor)</small></td><td>O−</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUIDELINES -->
+  <div class="list-section" id="requests">
+    <h5 class="fw-bold mb-3 text-danger">Important Donor Guidelines</h5>
+    <ul>
+      <li>Ensure you are healthy and well-rested before donating.</li>
+      <li>Drink plenty of fluids before and after donation.</li>
+      <li>Eat a light meal before donating blood.</li>
+      <li>Rest for 10–15 minutes after your donation.</li>
+      <li>Report any uneasiness immediately to the medical staff.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 BloodLife | All Rights Reserved</p>
+  <div class="social-icons mt-2">
+    <i class="bi bi-whatsapp"></i>
+    <i class="bi bi-instagram"></i>
+    <i class="bi bi-envelope-fill"></i>
+  </div>
+</footer>
+
+<!-- ====== SCRIPTS ====== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Sidebar toggle
+const sidebar = document.getElementById('sidebar');
+const content = document.getElementById('content');
+const navbar = document.querySelector('.navbar');
+document.getElementById('sidebarToggle').addEventListener('click', () => {
+  sidebar.classList.toggle('active');
+  if(window.innerWidth <= 768){
+    // Mobile: overlay
+    sidebar.style.left = sidebar.classList.contains('active') ? '0' : '-250px';
+  } else {
+    // Desktop: shift content
+    if(sidebar.classList.contains('active')){
+      content.classList.add('centered');
+      navbar.style.left = '0';
+    } else {
+      content.classList.remove('centered');
+      navbar.style.left = '230px';
+    }
+  }
+});
+
+// Animate compatibility chart when visible
+document.addEventListener("DOMContentLoaded", () => {
+  const chartSection = document.getElementById("compatibility");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) chartSection.classList.add("visible");
+    });
+  });
+  observer.observe(chartSection);
+});
+
+// Sidebar link activation
+const links = document.querySelectorAll("#sidebar a");
+links.forEach(link => {
+  link.addEventListener("click", function() {
+    links.forEach(l => l.classList.remove("active"));
+    this.classList.add("active");
+  });
+});
+</script>
+</body>
+</html>
